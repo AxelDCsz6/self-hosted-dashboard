@@ -1,0 +1,38 @@
+/* Tarjetas de Servicios */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.service-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 25px;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.service-card:hover { transform: translateY(-3px); border-color: var(--primary); }
+
+.card-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px; }
+.service-icon { font-size: 1.8rem; color: var(--text-secondary); }
+.status-dot { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; }
+.status-online { color: var(--success); background: rgba(16, 185, 129, 0.1); }
+.status-offline { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+
+.btn-access {
+    margin-top: auto;
+    text-align: center;
+    background: var(--bg-body);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s;
+}
+.btn-access:hover { background: var(--primary); border-color: var(--primary); color: white; }

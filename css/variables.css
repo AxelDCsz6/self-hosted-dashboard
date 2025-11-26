@@ -1,0 +1,24 @@
+:root {
+    /* PALETA "DEEP SLATE" - Profesional y Sobria */
+    --bg-body: #0f172a;       /* Fondo principal oscuro mate */
+    --bg-surface: #1e293b;    /* Superficie de tarjetas/header */
+    --bg-hover: #334155;      /* Color al pasar el mouse */
+    
+    --border-color: #334155;  /* Líneas divisorias sutiles */
+    
+    --text-primary: #f8fafc;  /* Blanco para lectura */
+    --text-secondary: #94a3b8; /* Gris azulado para etiquetas */
+    --text-muted: #64748b;    /* Texto apagado */
+    
+    /* COLORES DE ESTADO */
+    --primary: #3b82f6;       /* Azul corporativo */
+    --primary-dark: #2563eb;
+    --success: #10b981;       /* Verde Operativo */
+    --danger: #ef4444;        /* Rojo Error */
+    --warning: #f59e0b;       /* Naranja Alerta */
+
+    /* MEDIDAS */
+    --header-height: 64px;
+    --max-width: 1400px;
+    --radius: 6px;
+}

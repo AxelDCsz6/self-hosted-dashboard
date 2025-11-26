@@ -1,0 +1,85 @@
+@import 'variables.css';
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- HEADER UNIFICADO --- */
+.main-header {
+    height: var(--header-height);
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.brand {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.brand i { color: var(--primary); font-size: 1.25rem; }
+
+.top-nav {
+    display: flex;
+    height: 100%;
+    gap: 10px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 15px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    height: 100%;
+}
+
+.nav-link:hover { background-color: rgba(255,255,255,0.03); color: var(--text-primary); }
+.nav-link.active { color: var(--primary); border-bottom-color: var(--primary); background-color: rgba(59, 130, 246, 0.05); }
+
+.user-controls { display: flex; align-items: center; gap: 15px; }
+.user-badge { font-size: 0.85rem; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border-color); }
+.btn-logout { color: var(--danger); text-decoration: none; padding: 5px; font-size: 1.1rem; }
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.main-container {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 30px auto;
+    padding: 0 20px;
+    flex: 1;
+}
+
+.page-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-title::after { content: ''; flex: 1; height: 1px; background: var(--border-color); margin-left: 15px; }

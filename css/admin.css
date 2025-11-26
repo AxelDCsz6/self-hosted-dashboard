@@ -1,0 +1,84 @@
+/* ADMIN CSS */
+
+/* Alertas */
+.alert-success { background: rgba(16,185,129,0.1); color: var(--success); padding: 15px; border-radius: var(--radius); border: 1px solid rgba(16,185,129,0.2); margin-bottom: 20px; }
+.alert-error { background: rgba(239,68,68,0.1); color: var(--danger); padding: 15px; border-radius: var(--radius); border: 1px solid rgba(239,68,68,0.2); margin-bottom: 20px; }
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    width: 100%; max-width: 500px;
+    margin: 20px;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Formularios */
+.form-panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.form-title {
+    font-size: 1.2rem; font-weight: 600;
+    margin-bottom: 25px; color: var(--text-primary);
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--border-color); padding-bottom: 15px;
+}
+
+.admin-form-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group label { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
+
+.form-input {
+    width: 100%; padding: 12px;
+    background: var(--bg-body); border: 1px solid var(--border-color);
+    border-radius: 6px; color: var(--text-primary);
+}
+.form-input:focus { outline: none; border-color: var(--primary); }
+
+.btn-submit {
+    height: 44px; background: var(--primary); color: white;
+    border: none; border-radius: 6px; cursor: pointer; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-submit:hover { background: var(--primary-dark); }
+
+/* Tablas */
+.catalog-container {
+    background: var(--bg-surface); border: 1px solid var(--border-color);
+    border-radius: var(--radius); overflow: hidden;
+}
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table th { padding: 15px 20px; text-align: left; background: rgba(0,0,0,0.2); font-size: 0.85rem; color: var(--text-secondary); }
+.admin-table td { padding: 15px 20px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
+.admin-table tr:hover { background: rgba(255,255,255,0.02); }
+
+.role-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; border: 1px solid var(--border-color); background: var(--bg-body); }
+.role-admin { border-color: var(--primary); color: var(--primary); background: rgba(59,130,246,0.1); }
+
+.action-btn {
+    width: 32px; height: 32px; border: 1px solid var(--border-color);
+    background: transparent; color: var(--text-secondary);
+    border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.action-btn:hover { background: var(--bg-body); color: var(--text-primary); }
+.action-btn.delete:hover { border-color: var(--danger); color: var(--danger); }

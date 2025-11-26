@@ -1,0 +1,119 @@
+:root {
+    /* Paleta Dark Enterprise */
+    --bg-body: #121212;       /* Negro casi absoluto */
+    --bg-card: #1e1e1e;       /* Gris muy oscuro para tarjetas */
+    --bg-hover: #2c2c2c;      /* Hover sutil */
+    
+    --primary: #bb86fc;       /* Acento principal (morado suave) */
+    --primary-variant: #3700b3;
+    
+    --secondary: #03dac6;     /* Acento secundario (teal) */
+    
+    --text-main: #e0e0e0;     /* Blanco humo */
+    --text-muted: #a0a0a0;    /* Gris medio */
+    
+    --border: #333333;        /* Bordes sutiles */
+    --success: #00c853;       /* Verde estado ok */
+    --warning: #ffd600;       /* Amarillo alerta */
+    --danger: #cf6679;        /* Rojo error */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a { text-decoration: none; color: inherit; transition: 0.2s; }
+
+/* --- Layout --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    width: 95%;
+}
+
+header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 30px;
+}
+
+.brand { font-size: 1.2rem; font-weight: 600; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+.brand i { color: var(--primary); }
+
+.nav-menu { display: flex; gap: 20px; align-items: center; }
+.nav-menu a { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
+.nav-menu a:hover, .nav-menu a.active { color: var(--primary); }
+.btn-logout { color: var(--danger) !important; }
+
+/* --- Grids y Cards --- */
+.dashboard-grid, .monitor-grid, .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.card, .service-card, .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.service-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary);
+}
+
+/* --- Tipografía y Elementos --- */
+h2, h3 { color: var(--text-main); margin-bottom: 15px; font-weight: 500; }
+
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 4px;
+    background: var(--primary-variant);
+    color: var(--text-main);
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-align: center;
+}
+.btn:hover { background: var(--primary); color: #000; }
+
+.btn-outline { background: transparent; border: 1px solid var(--border); }
+.btn-outline:hover { border-color: var(--text-muted); }
+
+/* --- Inputs --- */
+.login-page { align-items: center; justify-content: center; }
+.login-box { width: 100%; max-width: 400px; text-align: center; background: var(--bg-card); padding: 40px; border-radius: 12px; border: 1px solid var(--border); }
+.login-input, select {
+    width: 100%; padding: 12px; margin-bottom: 15px;
+    background: #121212; border: 1px solid var(--border);
+    color: white; border-radius: 4px;
+}
+.login-input:focus { border-color: var(--primary); outline: none; }
+
+/* --- Monitor Específico --- */
+.stat-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; letter-spacing: 0.5px; }
+.stat-value { font-size: 2.5rem; font-weight: 300; margin-bottom: 10px; }
+.progress-track { background: #333; height: 6px; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--secondary); width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* --- Utilidades --- */
+.text-success { color: var(--success); }
+.text-danger { color: var(--danger); }
+.text-warning { color: var(--warning); }
+.badge { font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.1); }
