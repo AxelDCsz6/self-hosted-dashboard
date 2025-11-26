@@ -4,23 +4,30 @@ require_admin();
 
 // Procesar formularios
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete'])) {
-        $db->prepare("DELETE FROM services WHERE id=?")->execute([$_POST['id']]);
+    // Validate CSRF token first
+    if (!isset($_POST['csrf_token']) || !validate_csrf_token($_POST['csrf_token'])) {
+        $err = "Invalid security token.";
     } else {
-        try {
-            $n = $_POST['name']; $u = $_POST['url']; $d = $_POST['desc']; 
-            $i = $_POST['icon'] ?: 'fas fa-server'; 
-            $s = $_POST['status']; $p = isset($_POST['public']) ? 1 : 0;
-            
-            $db->prepare("INSERT INTO services (name, url, description, icon, status, is_public) VALUES (?,?,?,?,?,?)")
-               ->execute([$n,$u,$d,$i,$s,$p]);
-        } catch(PDOException $e) {
-            // Manejo silencioso o log si la columna is_public falta
+        // CSRF token is valid, process the form
+        if (isset($_POST['delete'])) {
+            $db->prepare("DELETE FROM services WHERE id=?")->execute([$_POST['id']]);
+        } else {
+            try {
+                $n = $_POST['name']; $u = $_POST['url']; $d = $_POST['desc'];
+                $i = $_POST['icon'] ?: 'fas fa-server'; 
+                $s = $_POST['status']; $p = isset($_POST['public']) ? 1 : 0;
+                
+                $db->prepare("INSERT INTO services (name, url, description, icon, status, is_public) VALUES (?,?,?,?,?,?)")
+                   ->execute([$n,$u,$d,$i,$s,$p]);
+            } catch(PDOException $e) {
+                // Error handling
+            }
         }
-    }
-    header("Location: services.php");
-    exit;
+        header("Location: services.php");
+        exit;
+    }       
 }
+
 $services = get_all_services();
 ?>
 <!DOCTYPE html>
@@ -102,6 +109,7 @@ $services = get_all_services();
                 <button onclick="document.getElementById('modalService').style.display='none'" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-times"></i></button>
             </div>
             <form method="POST" class="admin-form-grid">
+  		<input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <div class="form-group"><label>Nombre</label><input type="text" name="name" class="form-input" required></div>
                 <div class="form-group"><label>URL</label><input type="text" name="url" class="form-input" required></div>
                 <div class="form-group"><label>Icono</label><input type="text" name="icon" class="form-input" value="fas fa-server"></div>

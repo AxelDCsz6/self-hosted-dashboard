@@ -6,26 +6,33 @@ $msg = '';
 $err = '';
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // CREAR
-    if(isset($_POST['create_user'])) {
-        if(create_new_user($_POST['username'], $_POST['password'], $_POST['role'])) {
-            $msg = "Usuario creado exitosamente.";
-        } else {
-            $err = "Error: El nombre de usuario ya existe.";
+    // Validate CSRF token first
+    if (!isset($_POST['csrf_token']) || !validate_csrf_token($_POST['csrf_token'])) {
+        $err = "Invalid security token.";
+    } else {
+        // CSRF token is valid, process the form
+        // CREAR
+        if(isset($_POST['create_user'])) {
+            if(create_new_user($_POST['username'], $_POST['password'], $_POST['role'])) {
+                $msg = "Usuario creado exitosamente.";
+            } else {
+                $err = "Error: El nombre de usuario ya existe.";
+            }
+        } 
+        // EDITAR
+        elseif(isset($_POST['edit_user'])) {
+            $pass = !empty($_POST['password']) ? $_POST['password'] : null;
+            update_user_data($_POST['id'], $_POST['username'], $_POST['role'], $pass);
+            $msg = "Usuario actualizado correctamente.";
         }
-    } 
-    // EDITAR
-    elseif(isset($_POST['edit_user'])) {
-        $pass = !empty($_POST['password']) ? $_POST['password'] : null;
-        update_user_data($_POST['id'], $_POST['username'], $_POST['role'], $pass);
-        $msg = "Usuario actualizado correctamente.";
-    }
-    // ELIMINAR
-    elseif(isset($_POST['delete_user'])) {
-        delete_system_user($_POST['id']);
-        $msg = "Usuario eliminado.";
+        // ELIMINAR
+        elseif(isset($_POST['delete_user'])) {
+            delete_system_user($_POST['id']);
+            $msg = "Usuario eliminado.";
+        }
     }
 }
+
 $users = get_all_users();
 ?>
 <!DOCTYPE html>
@@ -142,6 +149,7 @@ $users = get_all_users();
                 <button onclick="closeModal('modalCreate')" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-times"></i></button>
             </div>
             <form method="POST" class="admin-form-grid">
+		<input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="create_user" value="1">
                 <div class="form-group">
                     <label>Usuario</label>
@@ -171,6 +179,7 @@ $users = get_all_users();
                 <button onclick="closeModal('modalEdit')" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-times"></i></button>
             </div>
             <form method="POST" class="admin-form-grid">
+		<input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                 <input type="hidden" name="edit_user" value="1">
                 <input type="hidden" name="id" id="edit_id">
                 

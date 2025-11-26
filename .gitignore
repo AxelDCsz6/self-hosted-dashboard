@@ -1,0 +1,27 @@
+# Database files
+/data/server_hub.sqlite
+/data/*.sqlite
+/data/*.db
+
+# Environment files
+.env
+*.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo

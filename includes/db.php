@@ -1,6 +1,6 @@
 <?php
 // includes/db.php
-define('DB_PATH', '/var/lib/servidor_data/server_hub.sqlite');
+define('DB_PATH', __DIR__ . '/../data/server_hub.sqlite');
 
 try {
     $db = new PDO('sqlite:' . DB_PATH);

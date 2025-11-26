@@ -7,7 +7,21 @@ if (!defined('BASE_URL')) define('BASE_URL', '/');
 
 if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.cookie_httponly', 1);
+    ini_set('session.cookie_secure', 1);
+    ini_set('session.use_strict_mode', 1);
+    ini_set('session.cookie_samesite', 'Strict');
+
+    session_name('AXELHOST_SESSION');
+
     session_start();
+
+    if (!isset($_SESSION['created'])) {
+        session_regenerate_id(true);
+        $_SESSION['created'] = time();
+    } elseif (time() - $_SESSION['created'] > 1800) { // Regenerate every 30 minutes
+        session_regenerate_id(true);
+        $_SESSION['created'] = time();
+    }
 }
 
 // --- SETUP INICIAL (Crea tablas si no existen) ---
@@ -52,15 +66,24 @@ function setup_database() {
         details TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )");
-
-    // Admin por defecto
-    $chk = $db->query("SELECT COUNT(*) FROM users")->fetchColumn();
-    if ($chk == 0) {
-        $p = password_hash('admin123', PASSWORD_DEFAULT);
-        $db->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)")->execute(['admin', $p, 'admin']);
-    }
 }
+
 setup_database();
+
+// --- CSRF PROTECTION ---
+function generate_csrf_token() {
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function validate_csrf_token($token) {
+    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+}
+
+// Generate CSRF token for forms
+$csrf_token = generate_csrf_token();
 
 // --- SEGURIDAD ---
 function require_login() {
@@ -90,7 +113,7 @@ function log_event($action, $details = '') {
     $stmt->execute([$uid, $action, $ip, $details]);
 }
 
-// --- SERVICIOS (Aquí estaba tu error) ---
+// --- SERVICIOS ---
 function get_all_services() {
     global $db;
     return $db->query("SELECT * FROM services ORDER BY name ASC")->fetchAll();
