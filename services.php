@@ -53,7 +53,6 @@ $services = get_all_services();
             <a href="logout.php" class="btn-logout"><i class="fas fa-power-off"></i></a>
         </div>
     </header>
-
     <main class="main-container">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
             <div class="page-title" style="margin:0; border:none"><i class="fas fa-cogs"></i> Servicios</div>
@@ -91,6 +90,7 @@ $services = get_all_services();
                             <form method="POST" onsubmit="return confirm('¿Eliminar?');" style="margin:0;">
                                 <input type="hidden" name="delete" value="1">
                                 <input type="hidden" name="id" value="<?php echo $s['id']; ?>">
+				<input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                                 <button class="action-btn delete"><i class="fas fa-trash"></i></button>
                             </form>
                         </td>

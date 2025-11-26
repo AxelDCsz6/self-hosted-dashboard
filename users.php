@@ -129,6 +129,7 @@ $users = get_all_users();
                                 <form method="POST" onsubmit="return confirm('¿Eliminar usuario irreversiblemente?');" style="margin:0;">
                                     <input type="hidden" name="delete_user" value="1">
                                     <input type="hidden" name="id" value="<?php echo $u['id']; ?>">
+				    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                                     <button class="action-btn delete" title="Eliminar"><i class="fas fa-trash"></i></button>
                                 </form>
                             </div>
