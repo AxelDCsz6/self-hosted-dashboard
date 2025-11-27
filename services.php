@@ -2,6 +2,8 @@
 require_once __DIR__ . '/includes/functions.php';
 require_admin();
 
+$csrf_token = generate_csrf_token(); 
+
 // Procesar formularios
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate CSRF token first
@@ -11,7 +13,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // CSRF token is valid, process the form
         if (isset($_POST['delete'])) {
             $db->prepare("DELETE FROM services WHERE id=?")->execute([$_POST['id']]);
+        } elseif (isset($_POST['service_id']) && $_POST['service_id'] > 0) {
+            // --- UPDATE LOGIC ---
+            try {
+                $n = $_POST['name']; $u = $_POST['url']; $d = $_POST['desc'];
+                $i = $_POST['icon'] ?: 'fas fa-server'; 
+                $s = $_POST['status']; $p = isset($_POST['public']) ? 1 : 0;
+                
+                $db->prepare("UPDATE services SET name=?, url=?, description=?, icon=?, status=?, is_public=? WHERE id=?")
+                   ->execute([$n, $u, $d, $i, $s, $p, $_POST['service_id']]);
+            } catch(PDOException $e) {
+                // Error handling
+            }
         } else {
+            // --- INSERT LOGIC ---
             try {
                 $n = $_POST['name']; $u = $_POST['url']; $d = $_POST['desc'];
                 $i = $_POST['icon'] ?: 'fas fa-server'; 
@@ -56,7 +71,7 @@ $services = get_all_services();
     <main class="main-container">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
             <div class="page-title" style="margin:0; border:none"><i class="fas fa-cogs"></i> Servicios</div>
-            <button onclick="document.getElementById('modalService').style.display='flex'" class="btn-submit" style="width:auto; padding:0 20px;">
+            <button onclick="openServiceModal()" class="btn-submit" style="width:auto; padding:0 20px;">
                 <i class="fas fa-plus"></i> Nuevo Servicio
             </button>
         </div>
@@ -86,8 +101,16 @@ $services = get_all_services();
                                 <?php echo strtoupper($s['status']); ?>
                             </span>
                         </td>
-                        <td style="text-align:right">
-                            <form method="POST" onsubmit="return confirm('¿Eliminar?');" style="margin:0;">
+                        <td style="text-align:right; display:flex; justify-content:flex-end; gap:10px;">
+                            <!-- EDIT BUTTON -->
+                            <button 
+                                class="action-btn edit" 
+                                onclick="openServiceModal(<?php echo htmlspecialchars(json_encode($s)); ?>)">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                            
+                            <!-- DELETE FORM -->
+                            <form method="POST" onsubmit="return confirm('¿Eliminar el servicio <?php echo htmlspecialchars($s['name']); ?>?');" style="margin:0;">
                                 <input type="hidden" name="delete" value="1">
                                 <input type="hidden" name="id" value="<?php echo $s['id']; ?>">
 				<input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
@@ -105,29 +128,65 @@ $services = get_all_services();
     <div id="modalService" class="modal-overlay" style="display:none;">
         <div class="form-panel modal-content">
             <div class="form-title">
-                <span>Nuevo Servicio</span>
-                <button onclick="document.getElementById('modalService').style.display='none'" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-times"></i></button>
+                <span id="modal-title">Nuevo Servicio</span>
+                <button onclick="closeServiceModal()" style="background:none; border:none; color:white; cursor:pointer;"><i class="fas fa-times"></i></button>
             </div>
-            <form method="POST" class="admin-form-grid">
+            <form method="POST" id="serviceForm" class="admin-form-grid">
   		<input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
-                <div class="form-group"><label>Nombre</label><input type="text" name="name" class="form-input" required></div>
-                <div class="form-group"><label>URL</label><input type="text" name="url" class="form-input" required></div>
-                <div class="form-group"><label>Icono</label><input type="text" name="icon" class="form-input" value="fas fa-server"></div>
+                <!-- Hidden field for Service ID (0 for new, ID for edit) -->
+                <input type="hidden" name="service_id" id="service-id" value="0"> 
+                
+                <div class="form-group"><label>Nombre</label><input type="text" name="name" id="service-name" class="form-input" required></div>
+                <div class="form-group"><label>URL</label><input type="text" name="url" id="service-url" class="form-input" required></div>
+                <div class="form-group"><label>Icono</label><input type="text" name="icon" id="service-icon" class="form-input" value="fas fa-server"></div>
                 <div class="form-group">
                     <label>Estado</label>
-                    <select name="status" class="form-input">
+                    <select name="status" id="service-status" class="form-input">
                         <option value="online">Online</option>
                         <option value="offline">Offline</option>
                     </select>
                 </div>
-                <div class="form-group" style="grid-column: 1/-1"><label>Descripción</label><input type="text" name="desc" class="form-input"></div>
+                <div class="form-group" style="grid-column: 1/-1"><label>Descripción</label><input type="text" name="desc" id="service-desc" class="form-input"></div>
                 <div class="form-group" style="flex-direction:row; gap:10px; align-items:center;">
-                    <input type="checkbox" name="public" style="width:20px; height:20px;">
+                    <input type="checkbox" name="public" id="service-public" style="width:20px; height:20px;">
                     <label style="margin:0;">Público</label>
                 </div>
                 <button class="btn-submit" style="grid-column: 1/-1">GUARDAR</button>
             </form>
         </div>
     </div>
+    
+    <!-- JavaScript for Modal Handling -->
+    <script>
+    function openServiceModal(service = null) {
+        const modal = document.getElementById('modalService');
+        const form = document.getElementById('serviceForm');
+        
+        // Reset form for New Service
+        document.getElementById('service-id').value = '0';
+        document.getElementById('modal-title').innerText = 'Nuevo Servicio';
+        form.reset();
+        document.getElementById('service-icon').value = 'fas fa-server'; // Default icon
+        
+        // If a service object is passed, populate fields for Edit
+        if (service) {
+            document.getElementById('service-id').value = service.id;
+            document.getElementById('modal-title').innerText = 'Editar Servicio: ' + service.name;
+            document.getElementById('service-name').value = service.name;
+            document.getElementById('service-url').value = service.url;
+            document.getElementById('service-icon').value = service.icon;
+            document.getElementById('service-desc').value = service.description;
+            document.getElementById('service-status').value = service.status;
+            document.getElementById('service-public').checked = service.is_public == 1;
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeServiceModal() {
+        document.getElementById('modalService').style.display = 'none';
+        document.getElementById('serviceForm').reset(); // Reset form when closing
+    }
+    </script>
 </body>
 </html>

@@ -1,0 +1,94 @@
+/* --- Login Page Styles --- */
+
+.login-page { 
+    /* Centers the box vertically and horizontally */
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    min-height: 100vh;
+    background-color: var(--bg-body);
+}
+
+.login-box { 
+    width: 100%; 
+    max-width: 400px; 
+    text-align: center; 
+    background: var(--bg-surface); 
+    padding: 40px; 
+    border-radius: var(--radius); 
+    border: 1px solid var(--border-color); 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.login-header-icon {
+    font-size: 3rem; 
+    color: var(--primary);
+    margin-bottom: 20px;
+}
+
+.login-title {
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.login-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+}
+
+/* Input Styles */
+.form-group-login { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    margin-bottom: 15px; 
+    text-align: left;
+}
+
+.form-label-login { 
+    font-size: 0.8rem; 
+    font-weight: 700; 
+    color: var(--text-secondary); 
+    text-transform: uppercase;
+}
+
+.login-input {
+    width: 100%; 
+    padding: 12px; 
+    background: var(--bg-body); 
+    border: 1px solid var(--border-color);
+    color: var(--text-primary); 
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+}
+
+.login-input:focus { 
+    border-color: var(--primary); 
+    outline: none; 
+    box-shadow: 0 0 0 1px var(--primary);
+}
+
+/* Error Message */
+.login-alert-error { 
+    background: rgba(239, 68, 68, 0.1); /* Red with 10% opacity */
+    color: var(--danger); 
+    padding: 12px; 
+    border-radius: var(--radius); 
+    margin-bottom: 20px; 
+    font-size: 0.9rem; 
+    border: 1px solid rgba(239, 68, 68, 0.2); 
+    text-align: left;
+}
+.login-alert-error i { margin-right: 5px; }
+
+/* Button (using .btn-submit class already defined in admin.css/global styles) */
+.btn-login {
+    width: 100%; 
+    margin-top: 10px; 
+    padding: 12px; 
+    height: auto;
+    font-size: 1rem;
+}

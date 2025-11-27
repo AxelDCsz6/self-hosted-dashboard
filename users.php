@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/includes/functions.php';
 require_admin();
+$csrf_token = generate_csrf_token();
+
 
 $msg = '';
 $err = '';

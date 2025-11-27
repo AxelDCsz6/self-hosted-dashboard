@@ -1,74 +1,74 @@
 <?php
+// Incluir db.php PRIMERO
 require_once __DIR__ . '/db.php';
 date_default_timezone_set('America/Mexico_City');
 
-// Configuración Base
-if (!defined('BASE_URL')) define('BASE_URL', '/');
+// Configuración Base SIMPLIFICADA
+if (!defined('BASE_URL')) {
+    // Para desarrollo local en puerto 8000
+    define('BASE_URL', '/');
+}
 
+// SOLO iniciar sesión si no está activa - SIN configuraciones complejas
 if (session_status() === PHP_SESSION_NONE) {
-    ini_set('session.cookie_httponly', 1);
-    ini_set('session.cookie_secure', 1);
-    ini_set('session.use_strict_mode', 1);
-    ini_set('session.cookie_samesite', 'Strict');
-
     session_name('AXELHOST_SESSION');
-
     session_start();
-
-    if (!isset($_SESSION['created'])) {
-        session_regenerate_id(true);
-        $_SESSION['created'] = time();
-    } elseif (time() - $_SESSION['created'] > 1800) { // Regenerate every 30 minutes
-        session_regenerate_id(true);
-        $_SESSION['created'] = time();
-    }
 }
 
 // --- SETUP INICIAL (Crea tablas si no existen) ---
 function setup_database() {
-    global $db;
-    // Tabla Usuarios
-    $db->exec("CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL,
-        role TEXT DEFAULT 'user',
-        status TEXT DEFAULT 'active',
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )");
+    global $db; // Asegurar que $db esté disponible
     
-    // Tabla Servicios
-    $db->exec("CREATE TABLE IF NOT EXISTS services (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        url TEXT NOT NULL,
-        description TEXT,
-        icon TEXT DEFAULT 'fas fa-server',
-        status TEXT DEFAULT 'online',
-        is_public INTEGER DEFAULT 0
-    )");
+    try {
+        // Tabla Usuarios
+        $db->exec("CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL,
+            role TEXT DEFAULT 'user',
+            status TEXT DEFAULT 'active',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )");
+        
+        // Tabla Servicios
+        $db->exec("CREATE TABLE IF NOT EXISTS services (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            url TEXT NOT NULL,
+            description TEXT,
+            icon TEXT DEFAULT 'fas fa-server',
+            status TEXT DEFAULT 'online',
+            is_public INTEGER DEFAULT 0
+        )");
 
-    // Tabla Permisos
-    $db->exec("CREATE TABLE IF NOT EXISTS user_permissions (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL,
-        service_id INTEGER NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-        FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE
-    )");
+        // Tabla Permisos
+        $db->exec("CREATE TABLE IF NOT EXISTS user_permissions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            service_id INTEGER NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE
+        )");
 
-    // Tabla Logs
-    $db->exec("CREATE TABLE IF NOT EXISTS system_logs (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        action TEXT,
-        ip_address TEXT,
-        details TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )");
+        // Tabla Logs
+        $db->exec("CREATE TABLE IF NOT EXISTS system_logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            action TEXT,
+            ip_address TEXT,
+            details TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )");
+        
+    } catch (Exception $e) {
+        error_log("Database setup error: " . $e->getMessage());
+    }
 }
 
-setup_database();
+// Solo ejecutar setup si la base de datos está disponible
+if (isset($db)) {
+    setup_database();
+}
 
 // --- CSRF PROTECTION ---
 function generate_csrf_token() {
@@ -87,7 +87,14 @@ $csrf_token = generate_csrf_token();
 
 // --- SEGURIDAD ---
 function require_login() {
-    if (!isset($_SESSION['user_id'])) {
+    // Si ya estamos en login.php, no redirigir
+    $current_script = basename($_SERVER['PHP_SELF']);
+    if ($current_script === 'login.php') {
+        return;
+    }
+    
+    if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+        $_SESSION['redirect_url'] = $_SERVER['REQUEST_URI'];
         header("Location: " . BASE_URL . "login.php");
         exit;
     }
