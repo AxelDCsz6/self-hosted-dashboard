@@ -1,84 +1,303 @@
-/* ADMIN CSS */
+/* admin.css - Estilos originales para admin */
 
-/* Alertas */
-.alert-success { background: rgba(16,185,129,0.1); color: var(--success); padding: 15px; border-radius: var(--radius); border: 1px solid rgba(16,185,129,0.2); margin-bottom: 20px; }
-.alert-error { background: rgba(239,68,68,0.1); color: var(--danger); padding: 15px; border-radius: var(--radius); border: 1px solid rgba(239,68,68,0.2); margin-bottom: 20px; }
-
-/* Modal Overlay */
-.modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
+:root {
+    --primary-color: #4a90e2;
+    --primary-dark: #3a7bc8;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --danger-dark: #dc2626;
+    --warning-color: #f59e0b;
+    --bg-body: #0f172a;
+    --card-bg: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border-color: #334155;
 }
 
-.modal-content {
-    width: 100%; max-width: 500px;
-    margin: 20px;
-    animation: slideUp 0.3s ease;
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
 }
 
-@keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+.brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
-/* Formularios */
-.form-panel {
-    background: var(--bg-surface);
+.brand i {
+    color: var(--primary-color);
+    margin-right: 0.5rem;
+}
+
+.top-nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link.active {
+    color: var(--primary-color);
+}
+
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+.btn-logout {
+    color: var(--text-primary);
+    background: var(--danger-color);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.btn-logout:hover {
+    background: var(--danger-dark);
+}
+
+.main-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-title i {
+    color: var(--primary-color);
+    margin-right: 1rem;
+}
+
+.catalog-container {
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    padding: 30px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.action-btn.delete {
+    color: var(--danger-color);
+}
+
+.action-btn.delete:hover {
+    background: var(--danger-color);
+    color: white;
+}
+
+.action-btn.edit {
+    color: var(--primary-color);
+}
+
+.action-btn.edit:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.role-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.role-admin {
+    background: rgba(74, 144, 226, 0.2);
+    color: var(--primary-color);
+}
+
+.form-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 2rem;
 }
 
 .form-title {
-    font-size: 1.2rem; font-weight: 600;
-    margin-bottom: 25px; color: var(--text-primary);
-    display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid var(--border-color); padding-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-title span {
+    font-size: 1.25rem;
+    font-weight: 600;
 }
 
 .admin-form-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 }
 
-.form-group { display: flex; flex-direction: column; gap: 8px; }
-.form-group label { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
 
 .form-input {
-    width: 100%; padding: 12px;
-    background: var(--bg-body); border: 1px solid var(--border-color);
-    border-radius: 6px; color: var(--text-primary);
+    padding: 0.75rem;
+    background: var(--bg-body);
+    border: 1px solid var(--border-color);
+    border-radius: 0.25rem;
+    color: var(--text-primary);
+    transition: border-color 0.3s ease;
 }
-.form-input:focus { outline: none; border-color: var(--primary); }
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
 
 .btn-submit {
-    height: 44px; background: var(--primary); color: white;
-    border: none; border-radius: 6px; cursor: pointer; font-weight: 600;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
-.btn-submit:hover { background: var(--primary-dark); }
 
-/* Tablas */
-.catalog-container {
-    background: var(--bg-surface); border: 1px solid var(--border-color);
-    border-radius: var(--radius); overflow: hidden;
+.btn-submit:hover {
+    background: var(--primary-dark);
 }
-.admin-table { width: 100%; border-collapse: collapse; }
-.admin-table th { padding: 15px 20px; text-align: left; background: rgba(0,0,0,0.2); font-size: 0.85rem; color: var(--text-secondary); }
-.admin-table td { padding: 15px 20px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
-.admin-table tr:hover { background: rgba(255,255,255,0.02); }
 
-.role-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; border: 1px solid var(--border-color); background: var(--bg-body); }
-.role-admin { border-color: var(--primary); color: var(--primary); background: rgba(59,130,246,0.1); }
-
-.action-btn {
-    width: 32px; height: 32px; border: 1px solid var(--border-color);
-    background: transparent; color: var(--text-secondary);
-    border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+.alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--success-color);
 }
-.action-btn:hover { background: var(--bg-body); color: var(--text-primary); }
-.action-btn.delete:hover { border-color: var(--danger); color: var(--danger); }
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--danger-color);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .top-nav {
+        order: 2;
+    }
+
+    .admin-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
